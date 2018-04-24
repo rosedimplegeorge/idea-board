@@ -21,6 +21,25 @@ class LogIn extends Component {
         console.error(err)
       })
   }
+  createUser = () => {
+    axios.post('/api/users', {
+      user: this.state.user
+    }).then((res) => {
+      this.setState({redirectToHome: true, createdUser: res.data})
+    })
+  }
+
+  handleChange = (e) => {
+    const user = {...this.state.user}
+    user[e.target.name] = e.target.value
+    this.setState({user})
+  }
+
+  handleSignUp = (e) => {
+    e.preventDefault()
+    this.createUser()
+  }
+
 
   render() {
     console.log("Users in state at LogIn Render", this.state.users)
@@ -31,6 +50,7 @@ class LogIn extends Component {
         </div>)
     })
 
+
     return (
       <div>
         <div>
@@ -39,6 +59,19 @@ class LogIn extends Component {
         <h1>Log-In</h1>
         <h3>Please Select an Existing User</h3>
         {userLinks}
+        <h1>Sign-Up</h1>
+          <form onSubmit={this.handleSignUp}>
+            <div>
+              <label htmlFor="userName">User Name</label>
+              <input onChange={this.handleChange} name="userName" type="text" value={this.state.userName}/>
+            </div>
+            <div>
+              <label htmlFor="password">Password</label>
+              <input onChange={this.handleChange} name="password" type="text" value={this.state.password}/>
+            </div>
+          <button>Sign Up</button>
+        </form>
+
       </div>
     )
   }
